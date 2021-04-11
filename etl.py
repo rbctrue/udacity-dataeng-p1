@@ -8,6 +8,9 @@ from files_to_df import *
 
 
 def process_song_file(cur, filepath):
+    '''Pulls artist and song data from json files in the filepath and enters it into 
+       song and artist tables in the sparkify database
+    '''
     # open song file
     df = df_main(filepath, 'JSON')
 
@@ -23,6 +26,10 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    '''Pulls song play, user and related data from json files in 
+       the filepath and enters it into song_play, user, and time tables 
+       in the sparkify database.
+    '''
     # open log file
     df = df_main(filepath, 'JSON')
 
@@ -76,6 +83,9 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    '''Finds total number of json files in inputed directory
+       and commits it to the inputed connection.
+    '''
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -95,6 +105,11 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    '''Connects to the sparkify database and pushes data from json 
+       files using process_song_file, process_log_file, and process_data
+       functions to fill the tables in the database (artist, song, user, 
+       time, and songplay).
+    '''
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 

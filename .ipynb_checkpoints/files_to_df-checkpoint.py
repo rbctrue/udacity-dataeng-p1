@@ -19,9 +19,11 @@ def get_files(filepath, extensiontype):
     '''
     
     all_files = []
+    print(os.walk(filepath))
     for root, dirs, files in os.walk(filepath):
         files = glob.glob(os.path.join(root,'*.' + extensiontype))
         for f in files :
+            print(os.path.abspath(f))
             all_files.append(os.path.abspath(f))
     
     return all_files
@@ -47,13 +49,11 @@ def files_to_df(data, extensiontype):
     # Loop through song files and fill df
     try:
         if extensiontype == 'JSON':
-            for ind in range(len(data)):
-                df_new_file = pd.read_json(data[ind], lines=True)
-                df = df.append(df_new_file, ignore_index=True)       
+            df_new_file = pd.read_json(data, lines=True)
+            df = df.append(df_new_file, ignore_index=True) 
         elif extensiontype == 'CSV':
-            for ind in range(len(data)):
-                df_new_file = pd.read_csv(data[ind])
-                df = df.append(df_new_file, ignore_index=True)       
+            df_new_file = pd.read_csv(data)
+            df = df.append(df_new_file, ignore_index=True)       
         else:
             print('please select either json or csv for extension')
             exit()
@@ -72,9 +72,8 @@ def df_main(filepath, extension):
 
     - Reads all files in list into a data frame
     '''
-    file_list = get_files(filepath, extension)
-
-    df = files_to_df(file_list, extension)
+    #file_list = get_files(filepath, extension)
+    df = files_to_df(filepath, extension)
 
     return df
 
